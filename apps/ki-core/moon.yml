@@ -18,7 +18,7 @@ fileGroups:
 
 tasks:
   run: 
-    command: 'cargon run'
+    command: 'cargo run'
   build:
     command: 'cargo build'
     inputs:
