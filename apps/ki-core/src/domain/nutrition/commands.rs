@@ -1,4 +1,5 @@
 use super::models::{FoodEntry, MacroNutrients};
+use super::repository::NutritionRepository;
 
 #[derive(Debug)]
 pub struct LogFoodCommand {
@@ -8,7 +9,10 @@ pub struct LogFoodCommand {
     pub fat_g: f32,
 }
 
-pub fn handle_log_food(cmd: LogFoodCommand) -> Result<FoodEntry, String> {
+pub fn handle_log_food(
+    cmd: LogFoodCommand,
+    repo: &impl NutritionRepository
+) -> Result<FoodEntry, String> {
     if cmd.protein_g < 0.0 || cmd.carbs_g < 0.0 || cmd.fat_g < 0.0 {
         return Err("Macros cannot be negative".to_string());
     }
@@ -26,6 +30,8 @@ pub fn handle_log_food(cmd: LogFoodCommand) -> Result<FoodEntry, String> {
         },
         timestamp: "Just now".to_string(),
     };
+
+    repo.save_food(&entry)?;
 
     Ok(entry)
 
